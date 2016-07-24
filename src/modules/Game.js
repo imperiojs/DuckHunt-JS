@@ -236,6 +236,8 @@ class Game {
     this.stage = new Stage({
       spritesheet: this.spritesheet
     });
+    document.getElementById('nonce-container').innerHTML =
+      'Mobile code: <span>' + imperio.nonce + '</span>';
     imperio.listenerRoomSetup();
     imperio.roomUpdate();
     imperio.dataListener(this.confirmInitialization);
@@ -286,6 +288,50 @@ class Game {
 
   bindEvents() {
     window.addEventListener('resize', this.scaleToWindow.bind(this));
+  }
+
+  handleGyroStream(gyroData) {
+    // print the gyro data stream to our feedback div
+    var target = document.getElementById('initialization-data');
+    target.innerHTML = JSON.stringify(gyroData);
+
+    // if we're ready to game, try and map out position!
+    if (state === 'gaming') {
+      // HANDLE X COORDS
+      var aMin = corners.tl.a;
+      var aMax = corners.br.a;
+      console.log(`aMin: ${aMin}, aMax: ${aMax}`);
+      if (aMax > aMin) aMax -= 360;
+      if (gyroData.alpha > aMin) gyroData.alpha -= 360;
+      console.log(`new aMax: ${aMax}`);
+      console.log(`gyroData.alpha: ${gyroData.alpha}`);
+      var xPercentage = (aMin - gyroData.alpha) / (aMin - aMax);
+      console.log(`Percentage ${xPercentage}`);
+      var xMin = 0;
+      var xMax = window.innerWidth;
+      var xPosition = xMax * xPercentage;
+      console.log(`xMin: ${xMin}, xMax: ${xMax}, xPos: ${xPosition}`);
+
+      // HANDLE Y COORDS
+      var bMax = corners.tl.b;
+      var bMin = corners.br.b;
+      console.log(`bMax: ${bMax}, bMin: ${bMin}`);
+      // if (bMax > bMin) bMax -= 360;
+      // if (gyroData.alpha > aMin) gyroData.alpha -= 360;
+      // console.log(`new aMax: ${aMax}`);
+      console.log(`gyroData.beta: ${gyroData.beta}`);
+      var yPercentage = (bMax - gyroData.beta) / (bMax - bMin);
+      console.log(`Percentage ${yPercentage}`);
+      var yMin = 0;
+      var yMax = window.innerHeight;
+      var yPosition = yMax * yPercentage;
+      console.log(`yMin: ${yMin}, yMax: ${yMax}, yPos: ${yPosition}`);
+
+      document.getElementById('x-coords').innerHTML =
+        `X = ${xPosition}, Y = ${yPosition}`;
+      document.getElementById('reticle').style.left = `${xPosition}px`;
+      document.getElementById('reticle').style.top = `${yPosition}px`;
+    }
   }
 
   scaleToWindow() {
@@ -430,7 +476,7 @@ class Game {
         this.endWave();
       }
     //  TODO: this is the code that starts the game
-    requestAnimationFrame(this.animate.bind(this));
+    // requestAnimationFrame(this.animate.bind(this));
   }
 
 
