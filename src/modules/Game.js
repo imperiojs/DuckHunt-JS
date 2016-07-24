@@ -230,7 +230,8 @@ class Game {
     // where visually we attach the gameStatus
     // TODO: Append to element on our page div id game
     const gameDiv = document.getElementById('game');
-    window.appendChild(this.renderer.view);
+    document.body.appendChild(this.renderer.view);
+    // window.appendChild(this.renderer.view);
 
     this.stage = new Stage({
       spritesheet: this.spritesheet
