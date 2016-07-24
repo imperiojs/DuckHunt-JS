@@ -1,6 +1,91 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ------------------------------------ */
+/* ----           Desktop          ---- */
+/* ------------------------------------ */
+
 #devDiv {
-  height: 300px;
-  width: 100px;
+  height: 100%;
+  width: 200px;
   z-index: 100;
-  background: white;
+  position: absolute;
+  background: grey;
+  top: 0;
+}
+
+/*#game-wrap {
+  text-align: center;
+  height: 100vh;
+  background-image: url("./img/duck5.png");
+  background-position: center;
+  background-repeat: no-repeat;
+}*/
+
+#game-wrap h1 {
+  margin: 0;
+}
+
+#top-left, #top-right,
+#bottom-left, #bottom-right {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-color: red;
+  border: 1px solid #777777;
+}
+#top-left, #top-left-feedback {
+  top: 0;
+  left: 200px;
+}
+#top-right, #top-right-feedback {
+  top: 0;
+  right: 0;
+}
+#bottom-left, #bottom-left-feedback {
+  bottom: 0;
+  left: 200px;
+}
+#bottom-right, #bottom-right-feedback {
+  bottom: 0;
+  right: 0;
+}
+.calibrate-me {
+  background-color: blue;
+}
+#top-left-feedback, #top-right-feedback,
+#bottom-left-feedback, #bottom-right-feedback {
+  position: absolute;
+  width: 200px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#reticle {
+  position: fixed;
+  top: 50%;
+  left: 58%;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: red;
+}
+
+/* ------------------------------------ */
+/* ----           Mobile           ---- */
+/* ------------------------------------ */
+
+#initialize-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background-color: green;
 }

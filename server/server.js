@@ -30,14 +30,14 @@ app.get('/', imperio.init(),
     console.log('isMobile status:', req.imperio.isMobile);
     if (req.imperio.isMobile) {
       if (req.imperio.connected) {
-        res.render('./../client/tapMobile.ejs');
+        res.sendFile(path.join(`${__dirname}/../client/tapmobile.html`));
       }
       else {
-        res.render('./../client/rootmobile.ejs');
+        res.sendFile(path.join(`${__dirname}/../client/rootmobile.html`));
       }
     }
     else if (req.imperio.isDesktop) {
-      res.render('./../dist/desktop.html');
+      res.sendFile(path.join(`${__dirname}/../dist/desktop.html`));
     }
   }
 );
@@ -45,22 +45,36 @@ app.get('/', imperio.init(),
 app.get('/:nonce', imperio.init(),
   (req, res) => {
     if (req.imperio.isDesktop) {
-      res.render('./../dist/desktop.html');
+      res.sendFile(path.join(`${__dirname}/../dist/desktop.html`));
     }
     else if (req.imperio.isMobile) {
       if (req.imperio.connected) {
-        res.render('./../client/mobileConn.ejs');
+        res.sendFile(path.join(`${__dirname}/../client/tapmobile.html`));
       }
       else {
-        res.render('./../client/mobile.ejs');
+        res.sendFile(path.join(`${__dirname}/../client/rootmobile.html`));
       }
+    }
+  }
+);
+app.post('/', imperio.init(),
+  (req, res) => {
+    if (req.imperio.isMobile) {
+      if (req.imperio.connected) {
+        res.sendFile(path.join(`${__dirname}/../client/tapmobile.html`));
+      } else {
+        res.sendFile(path.join(`${__dirname}/../client/rootmobile.html`));
+      }
+    } else {
+      res.status(404)
+         .render(`${__dirname}/../client/browser.html`, { error: 'NO POST' });
     }
   }
 );
 // 404 error on invalid endpoint
 app.get('*', (req, res) => {
   res.status(404)
-     .render('./../client/404.html');
+     .send('./../client/404.html');
 });
 
 /* ----------------------------------

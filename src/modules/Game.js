@@ -20,7 +20,7 @@ class Game {
   constructor(opts) {
     this.spritesheet = opts.spritesheet;
     this.loader = PIXI.loader;
-    this.renderer =  PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
+    this.renderer =  PIXI.autoDetectRenderer(window.innerWidth - 200px, window.innerHeight, {
       backgroundColor: BLUE_SKY_COLOR
     });
     this.levelIndex = 0;
@@ -228,12 +228,15 @@ class Game {
   onLoad() {
     // where visually we attach the gameStatus
     // TODO: Append to element on our page div id game
-    document.body.appendChild(this.renderer.view);
+    const gameDiv = document.getElementById('game');
+    gameDiv.appendChild(this.renderer.view);
 
     this.stage = new Stage({
       spritesheet: this.spritesheet
     });
-
+    imperio.listenerRoomSetup()
+    imperio.roomUpdate();
+    imperio.dataListener(this.confirmInitialization);
     this.scaleToWindow();
     this.bindEvents();
     // TODO: trigger this on our commang not default
@@ -248,6 +251,33 @@ class Game {
 
   }
 
+  confirmInitialization(data) {
+    console.log('confirmInitialization invoked:', data);
+    var target = document.getElementById('initialization-data');
+    target.innerHTML = JSON.stringify(data);
+    var feedbackMap = {
+      tl: 'top-left-feedback',
+      tr: 'top-right-feedback',
+      bl: 'bottom-left-feedback',
+      br: 'bottom-right-feedback',
+    };
+    console.log('data:', data);
+    console.log('targetId', feedbackMap[data.target]);
+    var cornerTarget = document.getElementById(feedbackMap[data.target]);
+    initializing = data.target;
+    delete data.target;
+    corners[initializing] = data;
+    cornerTarget.innerHTML = JSON.stringify(data);
+    var cornersState = document.getElementById('corners-state');
+    cornersState.innerHTML = JSON.stringify(corners);
+
+    // ready to start game?
+    if (initializing === 'bl') {
+      state = 'gaming';
+      document.getElementById('state').innerHTML = 'game time!';
+    }
+  }
+
   // connectImperio() {
   //   imperio.
   // }
@@ -258,7 +288,7 @@ class Game {
 
   scaleToWindow() {
     // TODO: subtract size of devDiv to keep visible
-    this.renderer.resize(window.innerWidth - 100, window.innerHeight);
+    this.renderer.resize(window.innerWidth - 200px, window.innerHeight);
     this.stage.scaleToWindow();
   }
 
@@ -371,6 +401,7 @@ class Game {
         y: event.data.global.y
       }));
     }
+    // this.renderer.stop();
   }
 
   updateScore(ducksShot) {

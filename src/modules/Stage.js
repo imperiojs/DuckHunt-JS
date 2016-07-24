@@ -92,7 +92,7 @@ class Stage extends PIXI.Container {
    * Helper method that scales the stage container to the window size
    */
   scaleToWindow() {
-    this.scale.set(window.innerWidth / MAX_X, window.innerHeight / MAX_Y);
+    this.scale.set((window.innerWidth - 200px) / MAX_X, window.innerHeight / MAX_Y);
   }
 
   /**
