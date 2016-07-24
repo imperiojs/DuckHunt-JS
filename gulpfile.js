@@ -10,6 +10,9 @@ var shell = require('gulp-shell');
 var fs = require('fs');
 var rename = require('gulp-rename');
 var connect = require('gulp-connect');
+var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
+const nodemon = require('gulp-nodemon');
 
 gulp.task('modules', function() {
   browserify({
@@ -20,7 +23,7 @@ gulp.task('modules', function() {
     .pipe(source('main.js'))
     .pipe(rename('duckhunt.js'))
     .pipe(gulp.dest('./dist'))
-    .pipe(connect.reload());
+    // .pipe(connect.reload());
 });
 
 gulp.task('jshint', function() {
@@ -41,14 +44,14 @@ gulp.task('jscs', function() {
 
 gulp.task('watch', function() {
   gulp.watch(['./src/modules/*.js', './src/data/*.json', 'main.js', 'libs/*.js'], ['jshint', 'jscs', 'modules']);
-  gulp.watch(['./src/assets/images/**/*.png'], ['images']);
-  gulp.watch(['./src/assets/sounds/**/*.mp3'], ['audio']);
+  // gulp.watch(['./src/assets/images/**/*.png'], ['images']);
+  // gulp.watch(['./src/assets/sounds/**/*.mp3'], ['audio']);
 });
 
-gulp.task('serve', function() {
-  connect.server({
-    root: 'dist',
-    livereload: true
+gulp.task('serve', function () {
+  nodemon({
+    script: 'server/server.js',
+    ignore: ['client/', 'build/'],
   });
 });
 
@@ -95,5 +98,5 @@ gulp.task('deploy', function() {
 });
 
 gulp.task('js', ['jshint', 'jscs', 'modules']);
-gulp.task('dev', ['default', 'watch', 'serve']);
-gulp.task('default', ['images', 'audio', 'js']);
+gulp.task('dev', ['js', 'watch', 'serve']);
+gulp.task('default', ['js', 'watch']);

@@ -226,6 +226,8 @@ class Game {
   }
 
   onLoad() {
+    // where visually we attach the gameStatus
+    // TODO: Append to element on our page div id game
     document.body.appendChild(this.renderer.view);
 
     this.stage = new Stage({
@@ -234,17 +236,29 @@ class Game {
 
     this.scaleToWindow();
     this.bindEvents();
-    this.startLevel();
+    // TODO: trigger this on our commang not default
+    // Trigger after we connect mobile and calibrate
+    // imperio.listener
+    // make sure that calibrate happens agter connecttions and then run
+    // requestAnimationFrame(this.animate.bind(this));
+    // this.connectImperio();
+    // this.calibrateMobile();
     this.animate();
+    this.startLevel();
 
   }
+
+  // connectImperio() {
+  //   imperio.
+  // }
 
   bindEvents() {
     window.addEventListener('resize', this.scaleToWindow.bind(this));
   }
 
   scaleToWindow() {
-    this.renderer.resize(window.innerWidth, window.innerHeight);
+    // TODO: subtract size of devDiv to keep visible
+    this.renderer.resize(window.innerWidth - 100, window.innerHeight);
     this.stage.scaleToWindow();
   }
 
@@ -347,7 +361,7 @@ class Game {
     sound.play('loserSound');
     this.gameStatus = 'You Lose!';
   }
-
+  // pass the
   handleClick(event) {
     if (!this.outOfAmmo()) {
       sound.play('gunSound');
@@ -366,6 +380,9 @@ class Game {
   }
 
   bindInteractions() {
+    // this.stage.receiveTap =
+    // imperio.gesture('tap', )
+    // imperio.
     this.stage.mousedown = this.stage.touchstart = this.handleClick.bind(this);
   }
 
@@ -380,9 +397,11 @@ class Game {
         this.unbindInteractions();
         this.endWave();
       }
-
+    //  TODO: this is the code that starts the game
     requestAnimationFrame(this.animate.bind(this));
   }
+
+
 }
 
 export default Game;

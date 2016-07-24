@@ -186,6 +186,8 @@ class Stage extends PIXI.Container {
       this.flashScreen.visible = false;
     }, FLASH_MS);
 
+    // TODO: We will need to divide our click point by a divisor as well
+    // TODO: pass touch point into shotsFired
     clickPoint.x /= this.scale.x;
     clickPoint.y /= this.scale.y;
     let ducksShot = 0;
