@@ -10,6 +10,8 @@ import Hud from './Hud';
 
 const MAX_X = 800;
 const MAX_Y = 600;
+const gameDiv = document.getElementById('game');
+
 
 const DUCK_POINTS = {
   ORIGIN: new PIXI.Point(MAX_X / 2, MAX_Y)
@@ -92,7 +94,7 @@ class Stage extends PIXI.Container {
    * Helper method that scales the stage container to the window size
    */
   scaleToWindow() {
-    this.scale.set((window.innerWidth - 200px) / MAX_X, window.innerHeight / MAX_Y);
+    this.scale.set((window.innerWidth) / MAX_X, window.innerHeight / MAX_Y);
   }
 
   /**

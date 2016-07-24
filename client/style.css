@@ -26,6 +26,13 @@ body {
   background-repeat: no-repeat;
 }*/
 
+/*#game{
+  left: 200px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}*/
+
 #game-wrap h1 {
   margin: 0;
 }

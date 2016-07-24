@@ -9,6 +9,7 @@ const sound = new Howl(audioSpriteSheet);
 const BLUE_SKY_COLOR = 0x64b0ff;
 const PINK_SKY_COLOR = 0xfbb4d4;
 const SUCCESS_RATIO = 0.6;
+const gameDiv = document.getElementById('game');
 
 class Game {
   /**
@@ -20,7 +21,7 @@ class Game {
   constructor(opts) {
     this.spritesheet = opts.spritesheet;
     this.loader = PIXI.loader;
-    this.renderer =  PIXI.autoDetectRenderer(window.innerWidth - 200px, window.innerHeight, {
+    this.renderer =  PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
       backgroundColor: BLUE_SKY_COLOR
     });
     this.levelIndex = 0;
@@ -229,12 +230,12 @@ class Game {
     // where visually we attach the gameStatus
     // TODO: Append to element on our page div id game
     const gameDiv = document.getElementById('game');
-    gameDiv.appendChild(this.renderer.view);
+    window.appendChild(this.renderer.view);
 
     this.stage = new Stage({
       spritesheet: this.spritesheet
     });
-    imperio.listenerRoomSetup()
+    imperio.listenerRoomSetup();
     imperio.roomUpdate();
     imperio.dataListener(this.confirmInitialization);
     this.scaleToWindow();
@@ -288,7 +289,7 @@ class Game {
 
   scaleToWindow() {
     // TODO: subtract size of devDiv to keep visible
-    this.renderer.resize(window.innerWidth - 200px, window.innerHeight);
+    this.renderer.resize(window.innerWidth, window.innerHeight);
     this.stage.scaleToWindow();
   }
 
@@ -401,7 +402,6 @@ class Game {
         y: event.data.global.y
       }));
     }
-    // this.renderer.stop();
   }
 
   updateScore(ducksShot) {
