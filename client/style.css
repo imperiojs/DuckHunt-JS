@@ -1,0 +1,115 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ------------------------------------ */
+/* ----           Desktop          ---- */
+/* ------------------------------------ */
+
+.hide {
+  display: none;
+}
+
+.spacer {
+  display: block;
+  height: 10px;
+}
+
+#instructions {
+  position: absolute;
+  left:40px;
+  right: 260px;
+  top: 100px;
+  text-align: center;
+  background: clear;
+  color: red;
+  font-size: 4em;
+  z-index: 100000000;
+
+}
+
+#devDiv {
+  color: white;
+  font-size: 1.3em;
+  border: 1px solid black;
+  right: 0px;
+  padding: 10px;
+  height: 100%;
+  width: 200px;
+  z-index: 100;
+  position: absolute;
+  background: grey;
+  top: 0;
+}
+
+#game-wrap h1 {
+  margin: 0;
+}
+
+#top-left, #top-right,
+#bottom-left, #bottom-right {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  border-radius: 10px;
+  border: 1px solid #777777;
+}
+#top-left, #top-left-feedback {
+  font-size: 2.5em;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+}
+#top-right, #top-right-feedback {
+  font-size: 2.5em;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+  top: 0;
+  right: 220px;
+}
+#bottom-left, #bottom-left-feedback {
+  font-size: 2.5em;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+  bottom: 0;
+  left: 0;
+}
+#bottom-right, #bottom-right-feedback {
+  font-size: 2.5em;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+  bottom: 0;
+  right: 220px;
+}
+.calibrate-me {
+  background-color: blue;
+}
+/*#top-left-feedback, #top-right-feedback,
+#bottom-left-feedback, #bottom-right-feedback {
+  position: absolute;
+  width: 200px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}*/
+
+#reticle {
+  position: fixed;
+  top: 50%;
+  left: 43%;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background-color: clear;
+  z-index: 100000;
+}

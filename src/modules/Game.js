@@ -10,6 +10,21 @@ const BLUE_SKY_COLOR = 0x64b0ff;
 const PINK_SKY_COLOR = 0xfbb4d4;
 const SUCCESS_RATIO = 0.6;
 
+var state = 'initializing';
+var initializing = 'tl';
+var corners = {
+  tl: { a: 0, b: 0, g: 0 },
+  tr: { a: 0, b: 0, g: 0 },
+  br: { a: 0, b: 0, g: 0 },
+  bl: { a: 0, b: 0, g: 0 },
+};
+
+let event = {};
+event.data = {};
+event.data.global = {};
+let xPosition;
+let yPosition;
+
 class Game {
   /**
    * Game Constructor
@@ -20,7 +35,7 @@ class Game {
   constructor(opts) {
     this.spritesheet = opts.spritesheet;
     this.loader = PIXI.loader;
-    this.renderer =  PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
+    this.renderer =  PIXI.autoDetectRenderer(window.innerWidth - 200, window.innerHeight, {
       backgroundColor: BLUE_SKY_COLOR
     });
     this.levelIndex = 0;
@@ -227,24 +242,129 @@ class Game {
 
   onLoad() {
     document.body.appendChild(this.renderer.view);
-
     this.stage = new Stage({
       spritesheet: this.spritesheet
     });
-
+    document.getElementById('nonce-container').innerHTML =
+      'Mobile code: <span>' + imperio.nonce + '</span>';
     this.scaleToWindow();
     this.bindEvents();
-    this.startLevel();
+    imperio.dataListener(this.confirmInitialization.bind(this));
+    imperio.gyroscopeListener(this.handleGyroStream.bind(this));
+    imperio.tapListener(this.convertGyroToCoordForShot.bind(this));
     this.animate();
+    // this.startLevel();
+  }
 
+  confirmInitialization(data) {
+    // console.log('confirmInitialization invoked:', data);
+    initializing = data.target;
+    delete data.target;
+    corners[initializing] = data;
+    let calibrationCorner;
+    if (initializing === 'tl') calibrationCorner = document.getElementById('top-left');
+    if (initializing === 'tr') calibrationCorner = document.getElementById('top-right');
+    if (initializing === 'br') calibrationCorner = document.getElementById('bottom-right');
+    if (initializing === 'bl') calibrationCorner = document.getElementById('bottom-left');
+    calibrationCorner.classList.toggle('hide');
+    var cornersState = document.getElementById('corners-state');
+    cornersState.innerHTML =
+    `<strong>Corner Angles:</strong>
+    <div>Top Left:
+      <div>a:${Math.round(corners.tl.a)}, b:${Math.round(corners.tl.a)}, g:${Math.round(corners.tl.a)}</div>
+    </div>
+    <br/>
+    <div>Top Right:
+      <div>a:${Math.round(corners.tr.a)}, b:${Math.round(corners.tr.a)}, g:${Math.round(corners.tr.a)}</div>
+    </div>
+    <br/>
+    <div>Bottom Right:
+      <div>a:${Math.round(corners.br.a)}, b:${Math.round(corners.br.a)}, g:${Math.round(corners.br.a)}</div>
+    </div>
+    <br/>
+    <div>Bottom Left:
+      <div>a:${Math.round(corners.bl.a)}, b:${Math.round(corners.bl.a)}, g:${Math.round(corners.bl.a)}</div>
+    </div>`;
+    // ready to start game?
+    if (initializing === 'bl') {
+      state = 'gaming';
+      document.getElementById('instructions').classList.toggle('hide');
+      document.getElementById('state').innerHTML = "Game time! Let's shoot some ducks!";
+    }
+  }
+
+  convertGyroToCoordForShot(gyroData) {
+    console.log(gyroData);
+    const coords = {
+      x: xPosition,
+      y: yPosition
+    };
+    this.handleTap(coords);
+  }
+
+  handleTap(coords) {
+    if (!this.outOfAmmo()) {
+      sound.play('gunSound');
+      this.bullets -= 1;
+      this.updateScore(this.stage.shotsFired({
+        x: coords.x,
+        y: coords.y
+      }));
+    }
+  }
+
+  handleGyroStream(gyroData) {
+    // print the gyro data stream to our feedback div
+    var target = document.getElementById('initialization-data');
+    target.innerHTML =
+    `<strong>Currrent Angles:</strong>
+    <br/>
+    a:${Math.round(gyroData.alpha)}, b:${Math.round(gyroData.beta)}, g:${Math.round(gyroData.gamma)}`;
+    // if we're ready to game, try and map out position!
+    if (state === 'gaming') {
+      // HANDLE X COORDS
+      var aMin = corners.tl.a;
+      var aMax = corners.br.a;
+      if (aMax > aMin) aMax -= 360;
+      if (gyroData.alpha > aMin) gyroData.alpha -= 360;
+      var xPercentage = (aMin - gyroData.alpha) / (aMin - aMax);
+      var xMin = 0;
+      var xMax = window.innerWidth - 200;
+      xPosition = xMax * xPercentage;
+      // HANDLE Y COORDS
+      var bMax = corners.tl.b;
+      var bMin = corners.br.b;
+      var yPercentage = (bMax - gyroData.beta) / (bMax - bMin);
+      var yMin = 0;
+      var yMax = window.innerHeight;
+      yPosition = yMax * yPercentage;
+      event.data.global.x = xPosition;
+      event.data.global.y = yPosition;
+      document.getElementById('x-coords').innerHTML =
+      `<strong>Reticle Coordinates:</strong>
+      <br/>
+      X = ${Math.round(xPosition)}, Y = ${Math.round(yPosition)}`;
+      document.getElementById('reticle').style.left = `${xPosition}px`;
+      document.getElementById('reticle').style.top = `${yPosition}px`;
+    }
   }
 
   bindEvents() {
     window.addEventListener('resize', this.scaleToWindow.bind(this));
+    window.addEventListener('keypress', this.startGameOnKeypress.bind(this));
+  }
+
+  startGameOnKeypress(e) {
+    console.log('key pressed!');
+    if (e.keyCode === 32) {
+      console.log('start game!');
+      this.startLevel();
+    }
   }
 
   scaleToWindow() {
-    this.renderer.resize(window.innerWidth, window.innerHeight);
+    // TODO: subtract size of devDiv to keep visible
+    this.renderer.resize(window.innerWidth - 200, window.innerHeight);
     this.stage.scaleToWindow();
   }
 
@@ -347,7 +467,7 @@ class Game {
     sound.play('loserSound');
     this.gameStatus = 'You Lose!';
   }
-
+  // pass the
   handleClick(event) {
     if (!this.outOfAmmo()) {
       sound.play('gunSound');
@@ -366,6 +486,9 @@ class Game {
   }
 
   bindInteractions() {
+    // this.stage.receiveTap =
+    // imperio.gesture('tap', )
+    // imperio.
     this.stage.mousedown = this.stage.touchstart = this.handleClick.bind(this);
   }
 
@@ -380,9 +503,11 @@ class Game {
         this.unbindInteractions();
         this.endWave();
       }
-
+    //  TODO: this is the code that starts the game
     requestAnimationFrame(this.animate.bind(this));
   }
+
+
 }
 
 export default Game;
