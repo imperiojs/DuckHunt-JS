@@ -13,16 +13,15 @@
       background-color: white;
     }
   </style>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="devDiv">
-    <p id='header'> Developer Bar</p>
+    <p id='header' style="text-align: center;"> Developer Bar</p>
+    <hr/>
     <p id='nonce-container'></p>
     <p id='connection-type'><p>
+    <p id='connected-devices'><p>
     <p id='initialization-data'></p>
     <p id='corners-state'></p>
     <p id='state'>initializing...</p>
@@ -32,14 +31,14 @@
     <img id='reticle'src="Reticle.png"></img>
 
     <div id='top-left' class='calibrate-me'></div>
-    <div id='top-right'></div>
-    <div id='bottom-left'></div>
-    <div id='bottom-right'></div>
+    <div id='top-right' class='hide'></div>
+    <div id='bottom-left' class='hide'></div>
+    <div id='bottom-right' class='hide'></div>
 
-    <div id='top-left-feedback'>-</div>
+    <!-- <div id='top-left-feedback'>-</div>
     <div id='top-right-feedback'>-</div>
     <div id='bottom-left-feedback'>-</div>
-    <div id='bottom-right-feedback'>-</div>
+    <div id='bottom-right-feedback'>-</div> -->
   </div>
 </body>
   <script src='imperio.min.js'></script>

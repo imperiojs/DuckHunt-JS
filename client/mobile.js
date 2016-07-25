@@ -73,3 +73,5 @@ function initializeFeedback() {
     initializeBox.style.backgroundColor = 'green';
   }, 200);
 }
+
+imperio.webRTCConnect();
