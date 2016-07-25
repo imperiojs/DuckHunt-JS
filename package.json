@@ -4,7 +4,7 @@
   "description": "Duckhunt implemented in JS",
   "main": "server.js",
   "scripts": {
-    "start": "gulp && nodemon server/server",
+    "start": "gulp",
     "gulp": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +22,7 @@
   "gitHead": "85a85bc6d7a26917cd37d981928ad01be2e06c99",
   "readmeFilename": "README",
   "devDependencies": {
+    "6to5ify": "4.1.1",
     "audiosprite": "^0.5.0",
     "babelify": "^6.1.2",
     "bluebird": "^2.9.32",
@@ -31,19 +32,23 @@
     "gulp": "^3.9.0",
     "gulp-babel": "^5.1.0",
     "gulp-connect": "^2.2.0",
+    "gulp-css": "0.1.0",
     "gulp-jscs": "^1.6.0",
     "gulp-jshint": "^1.11.0",
     "gulp-nodemon": "2.1.0",
+    "gulp-notify": "2.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-shell": "^0.4.2",
     "gulp-sourcemaps": "1.6.0",
+    "gulp-streamify": "1.0.2",
     "gulp-uglify": "1.5.4",
     "howler": "^1.1.26",
     "lodash": "^3.10.0",
     "nodemon": "1.9.2",
     "pixi.js": "^3.0.0",
     "tween.js": "^0.14.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "3.7.0"
   },
   "dependencies": {
     "ejs": "2.4.2",

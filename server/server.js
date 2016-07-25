@@ -5,7 +5,7 @@ const server = require('http').Server(app); // eslint-disable-line
 const port = process.env.PORT || 3000;
 const path = require('path');
 const html = require('html');
-const imperio = require('imperio')(server);
+const imperio = require('imperio')(server, {globalRoomLimit: 2});
 
 /* ----------------------------------
  * -----   Global Middleware   ------

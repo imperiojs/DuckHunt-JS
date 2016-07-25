@@ -24,9 +24,12 @@ imperio.dataListener(); // callback
 var initializeBox = document.getElementById('initialize-box');
 initializeBox.addEventListener('touchend', initializeCorners);
 var shoot = document.getElementById('shoot');
-imperio.gesture('tap', shoot, () => console.log('emited tap event', event),
-function(event) {
-  return gyroState;
+imperio.gesture('tap', shoot,
+  function () {
+    console.log('emited tap event', event)
+  },
+  function(event) {
+    return gyroState;
 });
 
 // GYRO LISTENER CALLBACK
