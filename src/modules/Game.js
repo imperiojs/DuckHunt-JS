@@ -10,6 +10,14 @@ const BLUE_SKY_COLOR = 0x64b0ff;
 const PINK_SKY_COLOR = 0xfbb4d4;
 const SUCCESS_RATIO = 0.6;
 const gameDiv = document.getElementById('game');
+var state = 'initializing';
+var initializing = 'tl';
+var corners = {
+  tl: { a: 0, b: 0, g: 0 },
+  tr: { a: 0, b: 0, g: 0 },
+  br: { a: 0, b: 0, g: 0 },
+  bl: { a: 0, b: 0, g: 0 },
+};
 
 class Game {
   /**
@@ -238,20 +246,12 @@ class Game {
     });
     document.getElementById('nonce-container').innerHTML =
       'Mobile code: <span>' + imperio.nonce + '</span>';
-    imperio.listenerRoomSetup();
-    imperio.roomUpdate();
-    imperio.dataListener(this.confirmInitialization);
     this.scaleToWindow();
     this.bindEvents();
-    // TODO: trigger this on our commang not default
-    // Trigger after we connect mobile and calibrate
-    // imperio.listener
-    // make sure that calibrate happens agter connecttions and then run
-    // requestAnimationFrame(this.animate.bind(this));
-    // this.connectImperio();
-    // this.calibrateMobile();
+    imperio.dataListener(this.confirmInitialization.bind(this));
+    imperio.gyroscopeListener(this.handleGyroStream.bind(this));
     this.animate();
-    this.startLevel();
+    // this.startLevel();
 
   }
 
@@ -265,72 +265,85 @@ class Game {
       bl: 'bottom-left-feedback',
       br: 'bottom-right-feedback',
     };
-    console.log('data:', data);
-    console.log('targetId', feedbackMap[data.target]);
+    // console.log('data:', data);
+    // console.log('targetId', feedbackMap[data.target]);
     var cornerTarget = document.getElementById(feedbackMap[data.target]);
     initializing = data.target;
     delete data.target;
     corners[initializing] = data;
-    cornerTarget.innerHTML = JSON.stringify(data);
+    cornerTarget.innerHTML = `a:${Math.round(corners.tl.a)}, b:${Math.round(corners.tl.a)}, g:${Math.round(corners.tl.a)}`;
     var cornersState = document.getElementById('corners-state');
-    cornersState.innerHTML = JSON.stringify(corners);
-
+    cornersState.innerHTML =
+    `<div>Top Left:
+      <div>a:${Math.round(corners.tl.a)}, b:${Math.round(corners.tl.a)}, g:${Math.round(corners.tl.a)}</div>
+    </div>
+    <div>Top Right:
+      <div>a:${Math.round(corners.tr.a)}, b:${Math.round(corners.tr.a)}, g:${Math.round(corners.tr.a)}</div>
+    </div>
+    <div>Bottom Right:
+      <div>a:${Math.round(corners.br.a)}, b:${Math.round(corners.br.a)}, g:${Math.round(corners.br.a)}</div>
+    </div>
+    <div>Bottom Left:
+      <div>a:${Math.round(corners.bl.a)}, b:${Math.round(corners.bl.a)}, g:${Math.round(corners.bl.a)}</div>
+    </div>`;
     // ready to start game?
     if (initializing === 'bl') {
       state = 'gaming';
-      document.getElementById('state').innerHTML = 'game time!';
+      document.getElementById('state').innerHTML = "Game time! Let's shoot some ducks!";
     }
-  }
-
-  // connectImperio() {
-  //   imperio.
-  // }
-
-  bindEvents() {
-    window.addEventListener('resize', this.scaleToWindow.bind(this));
   }
 
   handleGyroStream(gyroData) {
     // print the gyro data stream to our feedback div
     var target = document.getElementById('initialization-data');
-    target.innerHTML = JSON.stringify(gyroData);
-
+    target.innerHTML = `a:${Math.round(gyroData.alpha)}, b:${Math.round(gyroData.beta)}, g:${Math.round(gyroData.gamma)}`;
     // if we're ready to game, try and map out position!
     if (state === 'gaming') {
       // HANDLE X COORDS
       var aMin = corners.tl.a;
       var aMax = corners.br.a;
-      console.log(`aMin: ${aMin}, aMax: ${aMax}`);
+      // console.log(`aMin: ${aMin}, aMax: ${aMax}`);
       if (aMax > aMin) aMax -= 360;
       if (gyroData.alpha > aMin) gyroData.alpha -= 360;
-      console.log(`new aMax: ${aMax}`);
-      console.log(`gyroData.alpha: ${gyroData.alpha}`);
+      // console.log(`new aMax: ${aMax}`);
+      // console.log(`gyroData.alpha: ${gyroData.alpha}`);
       var xPercentage = (aMin - gyroData.alpha) / (aMin - aMax);
-      console.log(`Percentage ${xPercentage}`);
+      // console.log(`Percentage ${xPercentage}`);
       var xMin = 0;
       var xMax = window.innerWidth;
       var xPosition = xMax * xPercentage;
-      console.log(`xMin: ${xMin}, xMax: ${xMax}, xPos: ${xPosition}`);
+      // console.log(`xMin: ${xMin}, xMax: ${xMax}, xPos: ${xPosition}`);
 
       // HANDLE Y COORDS
       var bMax = corners.tl.b;
       var bMin = corners.br.b;
-      console.log(`bMax: ${bMax}, bMin: ${bMin}`);
+      // console.log(`bMax: ${bMax}, bMin: ${bMin}`);
       // if (bMax > bMin) bMax -= 360;
       // if (gyroData.alpha > aMin) gyroData.alpha -= 360;
       // console.log(`new aMax: ${aMax}`);
-      console.log(`gyroData.beta: ${gyroData.beta}`);
+      // console.log(`gyroData.beta: ${gyroData.beta}`);
       var yPercentage = (bMax - gyroData.beta) / (bMax - bMin);
-      console.log(`Percentage ${yPercentage}`);
+      // console.log(`Percentage ${yPercentage}`);
       var yMin = 0;
       var yMax = window.innerHeight;
       var yPosition = yMax * yPercentage;
-      console.log(`yMin: ${yMin}, yMax: ${yMax}, yPos: ${yPosition}`);
-
-      document.getElementById('x-coords').innerHTML =
-        `X = ${xPosition}, Y = ${yPosition}`;
+      // console.log(`yMin: ${yMin}, yMax: ${yMax}, yPos: ${yPosition}`);
+      document.getElementById('x-coords').innerHTML = `X = ${Math.round(xPosition)}, Y = ${Math.round(yPosition)}`;
       document.getElementById('reticle').style.left = `${xPosition}px`;
       document.getElementById('reticle').style.top = `${yPosition}px`;
+    }
+  }
+
+  bindEvents() {
+    window.addEventListener('resize', this.scaleToWindow.bind(this));
+    window.addEventListener('keypress', this.startGameOnKeypress.bind(this));
+  }
+
+  startGameOnKeypress(e) {
+    console.log('key pressed!');
+    if (e.keyCode === 32) {
+      console.log('start game!');
+      this.startLevel();
     }
   }
 
@@ -476,7 +489,7 @@ class Game {
         this.endWave();
       }
     //  TODO: this is the code that starts the game
-    // requestAnimationFrame(this.animate.bind(this));
+    requestAnimationFrame(this.animate.bind(this));
   }
 
 

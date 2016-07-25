@@ -9,7 +9,12 @@ body {
 /* ----           Desktop          ---- */
 /* ------------------------------------ */
 
+.hide {
+  display: none;
+}
+
 #devDiv {
+  padding: 10px;
   height: 100%;
   width: 200px;
   z-index: 100;
