@@ -11,7 +11,7 @@ var corners = {
 var gyroState = {
   a: 0,
   b: 0,
-  g: 0,
+  g: 0
 };
 
 // Join socket room and set up listeners
@@ -23,6 +23,11 @@ imperio.emitGyroscope.start(storeGyroState);
 imperio.dataListener(); // callback
 var initializeBox = document.getElementById('initialize-box');
 initializeBox.addEventListener('touchend', initializeCorners);
+var shoot = document.getElementById('shoot');
+imperio.gesture('tap', shoot, () => console.log('emited tap event', event),
+function(event) {
+  return gyroState;
+});
 
 // GYRO LISTENER CALLBACK
 // stores the gyro orientation data to a global gyroState variable
@@ -37,7 +42,7 @@ function storeGyroState(gyroObj) {
 function initializeCorners() {
   if (state === 'initializing') {
      // TODO switch statement
-     var target = initializing;
+    var target = initializing;
     if (initializing === 'tl') {
       corners.tl = gyroState;
       initializing = 'tr';

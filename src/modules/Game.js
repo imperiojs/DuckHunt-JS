@@ -19,6 +19,12 @@ var corners = {
   bl: { a: 0, b: 0, g: 0 },
 };
 
+let event = {};
+event.data = {};
+event.data.global = {};
+let xPosition;
+let yPosition;
+
 class Game {
   /**
    * Game Constructor
@@ -245,51 +251,75 @@ class Game {
     this.bindEvents();
     imperio.dataListener(this.confirmInitialization.bind(this));
     imperio.gyroscopeListener(this.handleGyroStream.bind(this));
+    imperio.tapListener(this.convertGyroToCoordForShot.bind(this));
     this.animate();
     // this.startLevel();
-
   }
 
   confirmInitialization(data) {
-    console.log('confirmInitialization invoked:', data);
-    var target = document.getElementById('initialization-data');
-    target.innerHTML = JSON.stringify(data);
-    var feedbackMap = {
-      tl: 'top-left-feedback',
-      tr: 'top-right-feedback',
-      bl: 'bottom-left-feedback',
-      br: 'bottom-right-feedback',
-    };
-    // var cornerTarget = document.getElementById(feedbackMap[data.target]);
+    // console.log('confirmInitialization invoked:', data);
     initializing = data.target;
     delete data.target;
     corners[initializing] = data;
-    // cornerTarget.innerHTML = `a:${Math.round(corners.tl.a)}, b:${Math.round(corners.tl.a)}, g:${Math.round(corners.tl.a)}`;
+    let calibrationCorner;
+    if (initializing === 'tl') calibrationCorner = document.getElementById('top-left');
+    if (initializing === 'tr') calibrationCorner = document.getElementById('top-right');
+    if (initializing === 'br') calibrationCorner = document.getElementById('bottom-right');
+    if (initializing === 'bl') calibrationCorner = document.getElementById('bottom-left');
+    calibrationCorner.classList.toggle('hide');
     var cornersState = document.getElementById('corners-state');
     cornersState.innerHTML =
-    `<div>Top Left:
+    `<strong>Corner Angles:</strong>
+    <div>Top Left:
       <div>a:${Math.round(corners.tl.a)}, b:${Math.round(corners.tl.a)}, g:${Math.round(corners.tl.a)}</div>
     </div>
+    <br/>
     <div>Top Right:
       <div>a:${Math.round(corners.tr.a)}, b:${Math.round(corners.tr.a)}, g:${Math.round(corners.tr.a)}</div>
     </div>
+    <br/>
     <div>Bottom Right:
       <div>a:${Math.round(corners.br.a)}, b:${Math.round(corners.br.a)}, g:${Math.round(corners.br.a)}</div>
     </div>
+    <br/>
     <div>Bottom Left:
       <div>a:${Math.round(corners.bl.a)}, b:${Math.round(corners.bl.a)}, g:${Math.round(corners.bl.a)}</div>
     </div>`;
     // ready to start game?
     if (initializing === 'bl') {
       state = 'gaming';
+      document.getElementById('instructions').classList.toggle('hide');
       document.getElementById('state').innerHTML = "Game time! Let's shoot some ducks!";
+    }
+  }
+
+  convertGyroToCoordForShot(gyroData) {
+    console.log(gyroData);
+    const coords = {
+      x: xPosition,
+      y: yPosition
+    };
+    this.handleTap(coords);
+  }
+
+  handleTap(coords) {
+    if (!this.outOfAmmo()) {
+      sound.play('gunSound');
+      this.bullets -= 1;
+      this.updateScore(this.stage.shotsFired({
+        x: coords.x,
+        y: coords.y
+      }));
     }
   }
 
   handleGyroStream(gyroData) {
     // print the gyro data stream to our feedback div
     var target = document.getElementById('initialization-data');
-    target.innerHTML = `a:${Math.round(gyroData.alpha)}, b:${Math.round(gyroData.beta)}, g:${Math.round(gyroData.gamma)}`;
+    target.innerHTML =
+    `<strong>Currrent Angles:</strong>
+    <br/>
+    a:${Math.round(gyroData.alpha)}, b:${Math.round(gyroData.beta)}, g:${Math.round(gyroData.gamma)}`;
     // if we're ready to game, try and map out position!
     if (state === 'gaming') {
       // HANDLE X COORDS
@@ -300,15 +330,20 @@ class Game {
       var xPercentage = (aMin - gyroData.alpha) / (aMin - aMax);
       var xMin = 0;
       var xMax = window.innerWidth - 200;
-      var xPosition = xMax * xPercentage;
+      xPosition = xMax * xPercentage;
       // HANDLE Y COORDS
       var bMax = corners.tl.b;
       var bMin = corners.br.b;
       var yPercentage = (bMax - gyroData.beta) / (bMax - bMin);
       var yMin = 0;
       var yMax = window.innerHeight;
-      var yPosition = yMax * yPercentage;
-      document.getElementById('x-coords').innerHTML = `X = ${Math.round(xPosition)}, Y = ${Math.round(yPosition)}`;
+      yPosition = yMax * yPercentage;
+      event.data.global.x = xPosition;
+      event.data.global.y = yPosition;
+      document.getElementById('x-coords').innerHTML =
+      `<strong>Reticle Coordinates:</strong>
+      <br/>
+      X = ${Math.round(xPosition)}, Y = ${Math.round(yPosition)}`;
       document.getElementById('reticle').style.left = `${xPosition}px`;
       document.getElementById('reticle').style.top = `${yPosition}px`;
     }

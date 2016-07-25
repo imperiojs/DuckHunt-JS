@@ -13,6 +13,24 @@ body {
   display: none;
 }
 
+.spacer {
+  display: block;
+  height: 10px;
+}
+
+#instructions {
+  position: absolute;
+  left:40px;
+  right: 260px;
+  top: 100px;
+  text-align: center;
+  background: clear;
+  color: red;
+  font-size: 4em;
+  z-index: 100000000;
+
+}
+
 #devDiv {
   color: white;
   font-size: 1.3em;
@@ -41,25 +59,41 @@ body {
   border: 1px solid #777777;
 }
 #top-left, #top-left-feedback {
+  font-size: 2.5em;
+  text-align: center;
+  align-content: center;
+  align-items: center;
   top: 0;
   left: 0;
 }
 #top-right, #top-right-feedback {
+  font-size: 2.5em;
+  text-align: center;
+  align-content: center;
+  align-items: center;
   top: 0;
-  right: 200px;
+  right: 220px;
 }
 #bottom-left, #bottom-left-feedback {
+  font-size: 2.5em;
+  text-align: center;
+  align-content: center;
+  align-items: center;
   bottom: 0;
   left: 0;
 }
 #bottom-right, #bottom-right-feedback {
+  font-size: 2.5em;
+  text-align: center;
+  align-content: center;
+  align-items: center;
   bottom: 0;
-  right: 200px;
+  right: 220px;
 }
 .calibrate-me {
   background-color: blue;
 }
-#top-left-feedback, #top-right-feedback,
+/*#top-left-feedback, #top-right-feedback,
 #bottom-left-feedback, #bottom-right-feedback {
   position: absolute;
   width: 200px;
@@ -67,7 +101,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+}*/
 
 #reticle {
   position: fixed;
