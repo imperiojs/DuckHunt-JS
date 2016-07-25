@@ -7,11 +7,7 @@ var corners = {
   bl: { a: 0, b: 0, g: 0 },
   br: { a: 0, b: 0, g: 0 },
 };
-var zero = {
-  a: 0,
-  b: 0,
-  c: 0,
-};
+
 var gyroState = {
   a: 0,
   b: 0,
@@ -44,26 +40,18 @@ function initializeCorners() {
      var target = initializing;
     if (initializing === 'tl') {
       corners.tl = gyroState;
-      // document.getElementById('top-left-feedback').innerHTML =
-      //   JSON.stringify(corners.tl);
       initializing = 'tr';
     }
     else if (initializing === 'tr') {
       corners.tr = gyroState;
-      // document.getElementById('top-right-feedback').innerHTML =
-      //   JSON.stringify(corners.tr);
       initializing = 'br';
     }
     else if (initializing === 'br') {
       corners.br = gyroState;
-      // document.getElementById('bottom-right-feedback').innerHTML =
-      //   JSON.stringify(corners.br);
       initializing = 'bl';
     }
     else if (initializing === 'bl') {
       corners.bl = gyroState;
-      // document.getElementById('bottom-left-feedback').innerHTML =
-      //   JSON.stringify(corners.bl);
       initializing = null;
     }
     else {
@@ -85,18 +73,3 @@ function initializeFeedback() {
     initializeBox.style.backgroundColor = 'green';
   }, 200);
 }
-
-
-
-// initialize corners
-// document.body.addEventListener('touchend', function() {
-//
-//
-//   if (orient.alpha > 180) orient.alpha = orient.alpha - 360;
-//   console.log('touch!', orient.alpha, orient.beta, orient.gamma);
-//   zero.alpha = orient.alpha;
-//   zero.beta = orient.beta;
-//   zero.gamma = orient.gamma;
-//   console.log('zero!', zero.alpha, zero.beta, zero.gamma);
-//
-// });

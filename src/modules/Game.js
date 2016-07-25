@@ -9,7 +9,7 @@ const sound = new Howl(audioSpriteSheet);
 const BLUE_SKY_COLOR = 0x64b0ff;
 const PINK_SKY_COLOR = 0xfbb4d4;
 const SUCCESS_RATIO = 0.6;
-const gameDiv = document.getElementById('game');
+
 var state = 'initializing';
 var initializing = 'tl';
 var corners = {
@@ -29,7 +29,7 @@ class Game {
   constructor(opts) {
     this.spritesheet = opts.spritesheet;
     this.loader = PIXI.loader;
-    this.renderer =  PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
+    this.renderer =  PIXI.autoDetectRenderer(window.innerWidth - 200, window.innerHeight, {
       backgroundColor: BLUE_SKY_COLOR
     });
     this.levelIndex = 0;
@@ -235,12 +235,7 @@ class Game {
   }
 
   onLoad() {
-    // where visually we attach the gameStatus
-    // TODO: Append to element on our page div id game
-    const gameDiv = document.getElementById('game');
     document.body.appendChild(this.renderer.view);
-    // window.appendChild(this.renderer.view);
-
     this.stage = new Stage({
       spritesheet: this.spritesheet
     });
@@ -265,13 +260,11 @@ class Game {
       bl: 'bottom-left-feedback',
       br: 'bottom-right-feedback',
     };
-    // console.log('data:', data);
-    // console.log('targetId', feedbackMap[data.target]);
-    var cornerTarget = document.getElementById(feedbackMap[data.target]);
+    // var cornerTarget = document.getElementById(feedbackMap[data.target]);
     initializing = data.target;
     delete data.target;
     corners[initializing] = data;
-    cornerTarget.innerHTML = `a:${Math.round(corners.tl.a)}, b:${Math.round(corners.tl.a)}, g:${Math.round(corners.tl.a)}`;
+    // cornerTarget.innerHTML = `a:${Math.round(corners.tl.a)}, b:${Math.round(corners.tl.a)}, g:${Math.round(corners.tl.a)}`;
     var cornersState = document.getElementById('corners-state');
     cornersState.innerHTML =
     `<div>Top Left:
@@ -302,32 +295,19 @@ class Game {
       // HANDLE X COORDS
       var aMin = corners.tl.a;
       var aMax = corners.br.a;
-      // console.log(`aMin: ${aMin}, aMax: ${aMax}`);
       if (aMax > aMin) aMax -= 360;
       if (gyroData.alpha > aMin) gyroData.alpha -= 360;
-      // console.log(`new aMax: ${aMax}`);
-      // console.log(`gyroData.alpha: ${gyroData.alpha}`);
       var xPercentage = (aMin - gyroData.alpha) / (aMin - aMax);
-      // console.log(`Percentage ${xPercentage}`);
       var xMin = 0;
-      var xMax = window.innerWidth;
+      var xMax = window.innerWidth - 200;
       var xPosition = xMax * xPercentage;
-      // console.log(`xMin: ${xMin}, xMax: ${xMax}, xPos: ${xPosition}`);
-
       // HANDLE Y COORDS
       var bMax = corners.tl.b;
       var bMin = corners.br.b;
-      // console.log(`bMax: ${bMax}, bMin: ${bMin}`);
-      // if (bMax > bMin) bMax -= 360;
-      // if (gyroData.alpha > aMin) gyroData.alpha -= 360;
-      // console.log(`new aMax: ${aMax}`);
-      // console.log(`gyroData.beta: ${gyroData.beta}`);
       var yPercentage = (bMax - gyroData.beta) / (bMax - bMin);
-      // console.log(`Percentage ${yPercentage}`);
       var yMin = 0;
       var yMax = window.innerHeight;
       var yPosition = yMax * yPercentage;
-      // console.log(`yMin: ${yMin}, yMax: ${yMax}, yPos: ${yPosition}`);
       document.getElementById('x-coords').innerHTML = `X = ${Math.round(xPosition)}, Y = ${Math.round(yPosition)}`;
       document.getElementById('reticle').style.left = `${xPosition}px`;
       document.getElementById('reticle').style.top = `${yPosition}px`;
@@ -349,7 +329,7 @@ class Game {
 
   scaleToWindow() {
     // TODO: subtract size of devDiv to keep visible
-    this.renderer.resize(window.innerWidth, window.innerHeight);
+    this.renderer.resize(window.innerWidth - 200, window.innerHeight);
     this.stage.scaleToWindow();
   }
 

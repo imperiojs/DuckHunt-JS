@@ -14,6 +14,10 @@ body {
 }
 
 #devDiv {
+  color: white;
+  font-size: 1.3em;
+  border: 1px solid black;
+  right: 0px;
   padding: 10px;
   height: 100%;
   width: 200px;
@@ -22,7 +26,6 @@ body {
   background: grey;
   top: 0;
 }
-
 
 #game-wrap h1 {
   margin: 0;
@@ -38,19 +41,19 @@ body {
 }
 #top-left, #top-left-feedback {
   top: 0;
-  left: 200px;
+  left: 0;
 }
 #top-right, #top-right-feedback {
   top: 0;
-  right: 0;
+  right: 200px;
 }
 #bottom-left, #bottom-left-feedback {
   bottom: 0;
-  left: 200px;
+  left: 0;
 }
 #bottom-right, #bottom-right-feedback {
   bottom: 0;
-  right: 0;
+  right: 200px;
 }
 .calibrate-me {
   background-color: blue;
@@ -68,25 +71,10 @@ body {
 #reticle {
   position: fixed;
   top: 50%;
-  left: 58%;
+  left: 43%;
   width: 30px;
   height: 30px;
   border-radius: 10px;
   background-color: clear;
   z-index: 100000;
 }
-
-/*#game-wrap {
-text-align: center;
-height: 100vh;
-background-image: url("./img/duck5.png");
-background-position: center;
-background-repeat: no-repeat;
-}*/
-
-/*#game{
-left: 200px;
-height: 100%;
-width: 100%;
-position: absolute;
-}*/
