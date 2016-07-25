@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<html>
+<head>
+  <title>imperioDuckHuntJS</title>
+  <meta name="description" content="An open source, web based, responsive implementation of Duck Hunt in HTML5 and ES2015">
+  <meta name="author" content="Michael Blanchard, Austin Lyon, Matt McLaughlin, Austin Nwaukoni - Originally Matt Surabian">
+  <style>
+    body {
+      overflow:hidden;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+  </style>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="devDiv">
+    <p id='header' style="text-align: center;"> <strong>Developer Bar</strong></p>
+    <hr/>
+    <p id='nonce-container'></p>
+    <p id='connection-type'><p>
+    <p id='connected-devices'><p>
+    <p id='initialization-data'></p>
+    <p id='corners-state'></p>
+    <p id='state'>Initializing...</p>
+    <p id='x-coords'></p>
+  </div>
+  <div id='game-wrap'>
+    <img id='reticle'src="Reticle.png"></img>
+    <div id="instructions">Calibrate the corners of your screen clockwise from top-left. Then press spacebar to start!</div>
+    <div id='top-left'>+</div>
+    <div id='top-right'>+</div>
+    <div id='bottom-left'>+</div>
+    <div id='bottom-right'>+</div>
+
+    <!-- <div id='top-left-feedback'>-</div>
+    <div id='top-right-feedback'>-</div>
+    <div id='bottom-left-feedback'>-</div>
+    <div id='bottom-right-feedback'>-</div> -->
+  </div>
+</body>
+  <script src='imperio.min.js'></script>
+  <script src='desktop.js'></script>
+  <script src="duckhunt.js"></script>
+</html>

@@ -6,8 +6,8 @@
       "waves": 3,
       "ducks": 2,
       "pointsPerDuck": 100,
-      "speed": 5,
-      "bullets": 3,
+      "speed": 1,
+      "bullets": 30,
       "time": 13
     },
     {
