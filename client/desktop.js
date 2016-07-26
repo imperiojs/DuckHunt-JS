@@ -9,7 +9,7 @@ imperio.roomUpdate(connectedClient);
 
 setInterval(() => {
   let connectionType = document.getElementById('connection-type');
-  connectionType.innerHTML = `Currently Connected via <strong>${imperio.connectionType}</strong>`;
+  connectionType.innerHTML = `Currently Connected via <span><strong>${imperio.connectionType}</strong></span>`;
 }, 2000);
 
 imperio.webRTCConnect();

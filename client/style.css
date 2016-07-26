@@ -113,3 +113,12 @@ body {
   background-color: clear;
   z-index: 100000;
 }
+
+/* ------------------------------------ */
+/* ----           Sidebar          ---- */
+/* ------------------------------------ */
+
+#nonce-container span {
+  display: block;
+  font-size: 70px;
+}
