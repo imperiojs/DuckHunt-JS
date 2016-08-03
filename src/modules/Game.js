@@ -262,29 +262,52 @@ class Game {
     delete data.target;
     corners[initializing] = data;
     let calibrationCorner;
-    if (initializing === 'tl') calibrationCorner = document.getElementById('top-left');
-    if (initializing === 'tr') calibrationCorner = document.getElementById('top-right');
-    if (initializing === 'br') calibrationCorner = document.getElementById('bottom-right');
-    if (initializing === 'bl') calibrationCorner = document.getElementById('bottom-left');
-    calibrationCorner.classList.toggle('hide');
+    let nextCorner;
+    if (initializing === 'tl') {
+      calibrationCorner = document.getElementById('top-left');
+      nextCorner = document.getElementById('top-right');
+    } else if (initializing === 'tr') {
+      calibrationCorner = document.getElementById('top-right');
+      nextCorner = document.getElementById('bottom-right');
+    } else if (initializing === 'br') {
+      calibrationCorner = document.getElementById('bottom-right');
+      nextCorner = document.getElementById('bottom-left');
+    } else if (initializing === 'bl') {
+      calibrationCorner = document.getElementById('bottom-left');
+      nextCorner = false;
+    }
+    console.log('hiding: ', calibrationCorner);
+    console.log('next: ', nextCorner);
+    // calibrationCorner.classList.toggle('hide');
+    if (nextCorner) {
+      nextCorner.classList.toggle('hide');
+    } else {
+      document.getElementById('top-left').classList.toggle('hide');
+      document.getElementById('top-right').classList.toggle('hide');
+      document.getElementById('bottom-right').classList.toggle('hide');
+      document.getElementById('bottom-left').classList.toggle('hide');
+    }
+    calibrationCorner.style.backgroundColor = 'green';
+
     var cornersState = document.getElementById('corners-state');
-    cornersState.innerHTML =
-    `<strong>Corner Angles:</strong>
-    <div>Top Left:
-      <div>a:${Math.round(corners.tl.a)}, b:${Math.round(corners.tl.a)}, g:${Math.round(corners.tl.a)}</div>
-    </div>
-    <br/>
-    <div>Top Right:
-      <div>a:${Math.round(corners.tr.a)}, b:${Math.round(corners.tr.a)}, g:${Math.round(corners.tr.a)}</div>
-    </div>
-    <br/>
-    <div>Bottom Right:
-      <div>a:${Math.round(corners.br.a)}, b:${Math.round(corners.br.a)}, g:${Math.round(corners.br.a)}</div>
-    </div>
-    <br/>
-    <div>Bottom Left:
-      <div>a:${Math.round(corners.bl.a)}, b:${Math.round(corners.bl.a)}, g:${Math.round(corners.bl.a)}</div>
-    </div>`;
+    // cornersState.innerHTML =
+    // `<strong>Corner Angles:</strong>
+    // <div>Top Left:
+    //   <div>a:${Math.round(corners.tl.a)}, b:${Math.round(corners.tl.a)}, g:${Math.round(corners.tl.a)}</div>
+    //   <div clas=""></div>
+    // </div>
+    // <br/>
+    // <div>Top Right:
+    //   <div>a:${Math.round(corners.tr.a)}, b:${Math.round(corners.tr.a)}, g:${Math.round(corners.tr.a)}</div>
+    // </div>
+    // <br/>
+    // <div>Bottom Right:
+    //   <div>a:${Math.round(corners.br.a)}, b:${Math.round(corners.br.a)}, g:${Math.round(corners.br.a)}</div>
+    // </div>
+    // <br/>
+    // <div>Bottom Left:
+    //   <div>a:${Math.round(corners.bl.a)}, b:${Math.round(corners.bl.a)}, g:${Math.round(corners.bl.a)}</div>
+    // </div>`;
     // ready to start game?
     if (initializing === 'bl') {
       state = 'gaming';

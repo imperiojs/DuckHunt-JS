@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 const server = require('http').Server(app); // eslint-disable-line
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3030;
 const path = require('path');
 const html = require('html');
 const imperio = require('imperio')(server, {globalRoomLimit: 2});
